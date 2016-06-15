@@ -1,0 +1,73 @@
+#include "entete.h"
+
+void credit(int account_number, int transaction_amount, int shmid)
+{
+
+  //pthread_mutex_lock(mutex_);
+  //printf("les adresses dans la methode credit %p %p %p \n", mutex_,&mutex_, shared_data_mutex_ );
+  printf("ok j commence le credit \n");
+  account account_for_credit;
+  account *shared_data = (account *) malloc(sizeof(account));
+  shared_data = (account*)shmat(shmid, NULL, 0);
+  if ( shared_data == (void *) -1) {
+      perror("shmat");
+      exit(1);
+  }
+  account_for_credit = shared_data[account_number];
+  account_for_credit.balance = account_for_credit.balance + transaction_amount;
+  shared_data[account_number] = account_for_credit;
+  shmdt(shared_data);
+  printf("ok jai fini le credit \n");
+  //pthread_mutex_unlock(mutex_);
+
+}
+
+int main(int argc, char **argv)
+{
+
+  int i;
+  int accounts_number = atoi(argv[1]);
+  int operations_number = atoi(argv[2]);
+  int transaction_amount = atoi(argv[3]);
+  shmid = atoi(argv[4]);
+  shmid_mutex = atoi(argv[5]);
+
+  accounts = (account *) malloc(sizeof(account));
+  account *shared_data = (account *) malloc(sizeof(account));
+
+  //pthread_mutex_t *shared_data_mutex_, *mutex_;
+
+  shared_data_mutex_ = (pthread_mutex_t*)shmat(shmid_mutex, NULL, 0);
+    if ( shared_data_mutex_ == (void *) -1) {
+        perror("shmat_mutex");
+        exit(1);
+    }
+  //mutex = shared_data_mutex;
+  mutex_ = shared_data_mutex_;
+  shmdt(shared_data_mutex_);
+  
+  printf("les adresses dans le credit %p %p \n", mutex_, shared_data_mutex_ );
+  
+  int val = pthread_mutex_lock(mutex_);
+  printf("la val credit %d et adresse mut %p \n", val, &mutex_);
+  shared_data = (account*)shmat(shmid, NULL, 0);
+  if ( shared_data == (void *) -1) {
+      perror("shmat");
+      exit(1);
+  }
+  for(i = 0; i < accounts_number; i++)
+  {
+    accounts[i] = shared_data[i] ;
+  }
+  shmdt(shared_data);
+  
+  pthread_mutex_unlock(mutex_);
+
+  printf("bk before credit %d \n",bank_balance(accounts, accounts_number));
+  for(i = 0; i < operations_number; i++)
+  {
+    int account_choose_credit_number = random_account_choose(accounts_number, accounts_number+1);
+    credit(account_choose_credit_number, transaction_amount, shmid);
+  }
+  printf("bk after credit %d \n",bank_balance(accounts, accounts_number));
+}

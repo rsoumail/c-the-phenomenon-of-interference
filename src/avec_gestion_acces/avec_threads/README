@@ -1,0 +1,32 @@
+
+A propos:
+Ce programme permet à trois threads de pouvoir effectuer des transactions au seins d'une banque.
+Il s'agit de pouvoir effectuer des operations de credit, de bebit et de transfert sans qu'il y ai d'interférences.
+Le transfert se fait par deux processus differents selon le mode de lecture ([-o] pour octale,[-f] pour flux et [-m] pour mappée)
+et le mode de communication([-p] pour la communication par pipe,[b] pour la communication par boite aux lettres et [-s] pour la communication par segment de mémoire partagé) choisit par l'utilisateur.
+
+les modes de lecture disponible:
+				"-o" : mode octale.
+				"-f" : mode flux.
+				"-m" : mode mappés.
+
+
+les types de communication disponible:
+					"-p" : type tubes,
+					"-b" : type boîte à message,
+					"-s" : type segment de mémoire partagé.
+
+
+Installation:
+		1.ouvrir un terminal
+		2.Ce placer dans le dossier(repertoire) du programme
+		3.taper la commande: make
+
+
+Exécution:
+
+SYNOPSYS:
+		./bank_transactions nombre-de-compte nombre-d-operations montant-des-transaction
+
+
+	Exemple: ./bank_transactions 2 5000 10000

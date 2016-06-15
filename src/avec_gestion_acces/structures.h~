@@ -1,0 +1,18 @@
+
+
+typedef struct
+{
+  int number;
+  int balance;
+
+} account;
+
+typedef struct
+{
+  account* source;
+  account* destination;
+  int transaction_amount;
+} transaction_info;
+
+
+

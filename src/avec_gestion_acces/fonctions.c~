@@ -1,0 +1,77 @@
+#include "fonctions.h"
+#include <pthread.h>
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+int random_account_choose(int maximum, int choose)
+{
+  int i;
+  i = rand()%(maximum-0) +0;
+  while(i == choose)
+  {
+    i = rand()%(maximum-0) +0;
+  }
+  return i;
+}
+
+int random_account_amount(int minimum, int maximum)
+{
+  int balance;
+  balance = rand()%(maximum-minimum) +minimum;
+  return balance;
+}
+
+int bank_balance(account **accounts, int accounts_number)
+{
+  int bank_balance_ = 0,i;
+  for(i = 0; i < accounts_number; i++)
+  {
+    bank_balance_ = bank_balance_ + accounts[i]->balance;
+  }
+  return bank_balance_;
+}
+
+void init_bank_accounts(account **accounts, int accounts_number)
+{
+  int i;
+  for(i = 0; i < accounts_number; i++)
+  {
+    int balance_ = random_account_amount(100000, 1000000);
+    accounts[i]->number = i+10000;
+    accounts[i]->balance = balance_;
+  }
+}
+
+void* credit(void* data)
+{
+  pthread_mutex_lock(&mutex);
+  transaction_info *transaction_info_ = (transaction_info*)malloc(sizeof(transaction_info));
+  transaction_info_ = (transaction_info *)data;
+  printf("montant transaction %d \n ",transaction_info_->transaction_amount);
+  printf("compte numero %d montant avant credit %d \n",transaction_info_->destination->number, transaction_info_->destination->balance );
+  transaction_info_->destination->balance = transaction_info_->destination->balance + transaction_info_->transaction_amount;
+  printf("compte numero %d montant après credit %d \n",transaction_info_->destination->number, transaction_info_->destination->balance );
+  pthread_mutex_unlock(&mutex);
+}
+
+void* debit(void* data)
+{
+  pthread_mutex_lock(&mutex);
+  transaction_info *transaction_info_ = (transaction_info*)malloc(sizeof(transaction_info));
+  transaction_info_ = (transaction_info *)data;
+  printf("montant transaction %d \n ",transaction_info_->transaction_amount);
+  printf("compte numero %d montant avant debit %d \n",transaction_info_->source->number, transaction_info_->source->balance );
+  transaction_info_->source->balance = transaction_info_->source->balance - transaction_info_->transaction_amount;
+  printf("compte numero %d montant après debit %d \n",transaction_info_->source->number, transaction_info_->source->balance );
+  pthread_mutex_unlock(&mutex);
+}
+
+void* transfer(void* data)
+{
+  printf("debut transfer \n");
+  debit(data);
+  credit(data);
+  printf("fin transfert \n");
+}
+
+
+

@@ -1,0 +1,30 @@
+#include <pthread.h>
+pthread_mutex_t mutex;
+
+typedef struct
+{
+  int number;
+  int balance;
+
+} account;
+
+typedef struct
+{
+  int transactions_number;
+  int transactions_amount;
+  int accounts_number;
+} transactions_infos;
+
+account *accounts;
+
+  int shmid, shmid_mutex; //identification de la mémoire partagée
+  size_t size; // la taille de
+  int key; // la clé associée au segment
+  
+  pthread_mutex_t *shared_data_mutex;
+  //pthread_mutex_t *mutex_;
+
+
+
+
+

@@ -1,0 +1,113 @@
+#include "entete.h"
+#include <stdlib.h>
+//pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+int key = 19;
+int main(int argc, char **argv)
+{
+  char shmid_char[30], shmid_mutex_char[30];
+  int process_debit_pid, process_credit_pid, process_transfer_pid;
+  int accounts_number = atoi(argv[1]);
+  int operations_number = atoi(argv[2]);
+  int transaction_amount = atoi(argv[3]);
+  int account_choose, bank_balance_before_transactions, bank_balance_after_transactions, result, i;
+  transactions_infos *transactions_infos_ = (transactions_infos*)malloc(sizeof(transactions_infos));
+  pthread_mutex_init(&mutex, NULL); 
+
+  transactions_infos_->transactions_number = operations_number;
+  transactions_infos_->transactions_amount = transaction_amount;
+  transactions_infos_->accounts_number = accounts_number;
+
+    printf("adresse mut main %p \n", &mutex);
+
+  accounts = (account *) malloc(sizeof(account));
+  account *shared_data = (account *) malloc(sizeof(account));
+
+
+  init_bank_accounts(accounts, accounts_number);
+
+  bank_balance_before_transactions= bank_balance(accounts, accounts_number);
+  
+  printf("bank before %d \n", bank_balance_before_transactions);
+
+  printf("Dans main avant shmat account number %d and balance %d \n", accounts[0].number,accounts[0].balance);
+  
+  shmid = shmget(key,accounts_number*sizeof(account), IPC_CREAT | 0755);
+  if(shmid == -1)
+  {
+    perror("Erreur lors de la création du segment de mémoire partagée :");
+    exit(EXIT_FAILURE);
+  }
+  
+  shared_data = (account*)shmat(shmid, NULL, 0);
+    if ( shared_data == (void *) -1) {
+        perror("shmat");
+        exit(1);
+    }
+    for(i = 0; i < accounts_number; i++)
+    {
+      shared_data[i] = accounts[i];
+    }
+    
+  shmid_mutex = shmget(18,sizeof(pthread_mutex_t), IPC_CREAT | 0755);
+  if(shmid_mutex == -1)
+  {
+    perror("Erreur lors de la création du segment de mémoire partagée pour le mutex :");
+    exit(EXIT_FAILURE);
+  }
+  
+  shared_data_mutex = (pthread_mutex_t*)shmat(shmid_mutex, NULL, 0);
+    if ( shared_data_mutex == (void *) -1) {
+        perror("shmat_mutex");
+        exit(1);
+    }
+  shared_data_mutex = &mutex;
+  printf("les adresses dans le main %p %p \n", &mutex, shared_data_mutex);
+  printf("Dans main pour shm account number %d and balance %d \n", shared_data[0].number,shared_data[0].balance);
+  
+  sprintf(shmid_char,"%d",shmid);
+  sprintf(shmid_mutex_char, "%d", shmid_mutex);
+  
+  process_debit_pid = fork();
+  if(process_debit_pid == 0)
+  {
+    execlp("./process_debit","process_debit_pid", argv[1], argv[2], argv[3],shmid_char,shmid_mutex_char, NULL);
+    perror("execlp"); 
+    exit(EXIT_SUCCESS);
+  }
+  /*process_credit_pid = fork();
+  if(process_credit_pid == 0)
+  {
+    execlp("./process_credit","process_credit_pid", argv[1], argv[2], argv[3],shmid_char,shmid_mutex_char, NULL);
+    perror("execlp"); 
+    exit(EXIT_SUCCESS);
+  }*/
+  /*process_transfer_pid = fork();
+  if(process_transfer_pid == 0)
+  {
+    execlp("./process_transfer","process_transfer_pid", argv[1], argv[2], argv[3],shmid_char, NULL);
+    perror("execlp"); 
+    exit(EXIT_SUCCESS);
+  }*/
+  else
+  {
+    wait(NULL);
+    wait(NULL);
+    //wait(NULL);
+    shared_data = (account *) shmat(shmid, NULL, IPC_NOWAIT);//attachement au segment de mémoire partagée
+    for(i = 0; i < accounts_number; i++)
+    {
+    accounts[i] = shared_data[i] ;
+    }
+    shmdt(shared_data);//déttachement du segment de mémoire partagée
+    shmctl(shmid,IPC_RMID,NULL);
+
+    bank_balance_after_transactions = bank_balance(accounts, accounts_number);
+    printf("bank after %d \n", bank_balance_after_transactions);
+    if(bank_balance_after_transactions != bank_balance_before_transactions)
+      printf("Il y a eu d'interférences \n");
+    else
+      printf("Il n'y a pas d'interférences \n");
+  }     
+}
+
+

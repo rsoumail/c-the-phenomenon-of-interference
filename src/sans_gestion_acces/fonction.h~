@@ -1,0 +1,9 @@
+#include <time.h>
+#include "structures.h"
+int maximum, int choose
+int random_account_choose(int, int);
+int random_account_amount(int, int);
+int random_account_number(int, int);
+void* credit(void *);
+void* debit(void *);
+void* transfert(void *);

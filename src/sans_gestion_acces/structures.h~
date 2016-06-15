@@ -1,0 +1,19 @@
+
+
+typedef struct
+{
+  int number;
+  int balance;
+
+} account;
+
+typedef struct
+{
+  int transactions_number;
+  int transactions_amount;
+} transactions_infos;
+
+account **accounts;
+
+
+
