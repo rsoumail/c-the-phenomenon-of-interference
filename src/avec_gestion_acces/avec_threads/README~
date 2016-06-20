@@ -26,7 +26,7 @@ Installation:
 Exécution:
 
 SYNOPSYS:
-		./td3 [mode-lecture] [type-memoire] fichiersource fichierdestinataire
+		./bank_transactions nombre-de-compte nombre-d-operations montant-des-transaction
 
 
-	Exemple: ./td3 -o -p info.txt dest.txt
+	Exemple: ./bank_transactions 2 5000 10000

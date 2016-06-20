@@ -2,19 +2,12 @@
 A propos:
 Ce programme permet à trois threads de pouvoir effectuer des transactions au seins d'une banque.
 Il s'agit de pouvoir effectuer des operations de credit, de bebit et de transfert sans qu'il y ai d'interférences.
-Le transfert se fait par deux processus differents selon le mode de lecture ([-o] pour octale,[-f] pour flux et [-m] pour mappée)
-et le mode de communication([-p] pour la communication par pipe,[b] pour la communication par boite aux lettres et [-s] pour la communication par segment de mémoire partagé) choisit par l'utilisateur.
 
-les modes de lecture disponible:
-				"-o" : mode octale.
-				"-f" : mode flux.
-				"-m" : mode mappés.
+Un thread s'occupe d'effectuer les opérations de débit, un autre s'occupe des opérations de crédit et le troisième s'occupe des opérations de transfert.
 
+Les informations telles que le nombre de comptes dans la banque, le nombre d'opérations à effectuer et le montant des operations sont fournies par l'utilisateur lors de l'execution du programme.
 
-les types de communication disponible:
-					"-p" : type tubes,
-					"-b" : type boîte à message,
-					"-s" : type segment de mémoire partagé.
+Toute les operations ont le même montant.
 
 
 Installation:
