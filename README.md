@@ -16,21 +16,13 @@ It's about to do credit, debit and transfer operations without interferences occ
 
 * Summary of set up
  
-* Configuration
-   + To use the program with process and without manage the interference use readme which are in without_manage_interference/with_process folder
-
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
+* Configuration & How to run tests
+   + To use the program with process and without manages the interferences use readme which are in src/without_manage_interference/with_process folder
+   + To use the program with threads and without manages the interferences use readme which are in src/without_manage_interference/with_threads folder
+   + To use the program with process and manages the interferences use readme which are in src/manage_interference/with_process folder
+   + To use the program with threads and manages the interferences use readme which are in src/manage_interference/with_threads folder
 
 ### Who do I talk to? ###
 
 * ramadansum@gmail.com
-* Other community or team contact
+* ramadan.souma422@students.uac.bj
