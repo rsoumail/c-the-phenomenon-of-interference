@@ -1,7 +1,8 @@
 # README #
 
-# Phenomeon of Interfernce using process and manage interferences #
+# Phenomeon of Interfernce using process and manage interferences in C #
 
+It's a program to manage the phenomeon of interference in C.
 This program allows three process to make some transactions in a bank.
 It's about to do credit, debit and transfer operations without interferences occures by using threads or process.
 
