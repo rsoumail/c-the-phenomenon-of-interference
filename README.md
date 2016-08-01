@@ -3,7 +3,7 @@
 # Phenomeon of Interfernce using process and manage interferences
 
 This program allows three process to make some transactions in a bank.
-It's about to do credit, debit and transfer operations without interferences occures.
+It's about to do credit, debit and transfer operations without interferences occures by using threads or process.
 
 
 ### What is this repository for? ###
@@ -15,7 +15,10 @@ It's about to do credit, debit and transfer operations without interferences occ
 ### How do I get set up? ###
 
 * Summary of set up
+ 
 * Configuration
+   + To use the program with process and without manage the interference use readme which are in without_manage_interference/with_process folder
+
 * Dependencies
 * Database configuration
 * How to run tests
