@@ -7,6 +7,9 @@ It's about to do credit, debit and transfer operations without interferences occ
 
 
 ## How do I get set up? ##
+
+ + git@github.com:ismaelrami/c-the-phenomenon-of-interference.git
+ + git clone https://Rami_Ismael@bitbucket.org/Rami_Ismael/c-the-phenomenon-of-interference.git
  
 ### Configuration & How to run tests ###
 
